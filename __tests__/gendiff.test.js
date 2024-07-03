@@ -13,3 +13,9 @@ test('flat json', () => {
   const expectedResult = genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'));
   expect(expectedResult).toBe(receivedResult);
 });
+
+test('flat yml', () => {
+  const receivedResult = readFile('result.txt');
+  const expectedResult = genDiff(getFixturePath('file1.yml'), getFixturePath('file2.yml'));
+  expect(expectedResult).toBe(receivedResult);
+});
