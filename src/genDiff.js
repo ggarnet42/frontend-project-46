@@ -1,25 +1,25 @@
-import _ from 'lodash';
-import parser from './parser.js';
+import fs from 'fs';
+import path from 'path';
+import parsers from './parsers.js';
+import diffTree from './diffTree.js';
+import formatStyle from './formatters/index.js';
 
-export default (filepath1, filepath2) => {
-  const [obj1, obj2] = parser(filepath1, filepath2);
-  const allKeys = [...Object.keys(obj1), ...Object.keys(obj2)];
-  const sortedKeys = _.sortBy(_.uniq(allKeys));
-  const diff = sortedKeys.reduce((acc, key) => {
-    if (_.has(obj1, key) && _.has(obj2, key)) {
-      if (obj1[key] === obj2[key]) {
-        return [...acc, `    ${key}: ${obj1[key]}`];
-      }
-      return [...acc, `  - ${key}: ${obj1[key]}`, `  + ${key}: ${obj2[key]}`];
-    }
-    if (_.has(obj1, key) && !_.has(obj2, key)) {
-      return [...acc, `  - ${key}: ${obj1[key]}`];
-    }
-    if (!_.has(obj1, key) && _.has(obj2, key)) {
-      return [...acc, `  + ${key}: ${obj2[key]}`];
-    }
-    return acc;
-  }, []);
-  const result = ['{', ...diff, '}'].join('\n');
-  return result;
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = path.dirname(__filename);
+
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename.trim());
+
+const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
+const extractFormat = (filename) => path.extname(filename).slice(1);
+
+const genDiff = (filepath1, filepath2, formatName = 'stylish') => {
+  const file1format = extractFormat(filepath1);
+  const file2format = extractFormat(filepath2);
+  const fileContent1 = readFile(filepath1);
+  const fileContent2 = readFile(filepath2);
+  const data1 = parsers(file1format, fileContent1);
+  const data2 = parsers(file2format, fileContent2);
+  const innerTree = diffTree(data1, data2);
+  return formatStyle(innerTree, formatName);
 };
+export default genDiff;
