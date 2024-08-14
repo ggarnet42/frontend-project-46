@@ -4,12 +4,7 @@ import parsers from './parsers.js';
 import diffTree from './diffTree.js';
 import formatStyle from './formatters/index.js';
 
-const __filename = new URL(import.meta.url).pathname;
-const __dirname = path.dirname(__filename);
-
-const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename.trim());
-
-const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
+const readFile = (filename) => fs.readFileSync(filename, 'utf-8');
 const extractFormat = (filename) => path.extname(filename).slice(1);
 
 const genDiff = (filepath1, filepath2, formatName = 'stylish') => {
