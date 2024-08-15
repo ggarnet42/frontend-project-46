@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'url';
+import fileURLToPath from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
 import genDiff from '../src/genDiff.js';
@@ -17,10 +17,11 @@ const formatA = 'stylish';
 const formatB = 'plain';
 const resultA = genDiff(firstFile, secondFile, formatA);
 const resultB = genDiff(firstFile, secondFile, formatB);
-test('genDiffAB', () => {
+test('should return correct diff between two JSON files', () => {
   expect(resultA).toEqual(getResultA);
   expect(resultB).toEqual(getResultB);
 });
+
 const firstFile2 = getFixturePath('file1.yaml');
 const secondFile2 = getFixturePath('file2.yaml');
 const getResultC = readFile('resultForStylish.txt').trim();
@@ -29,15 +30,16 @@ const formatC = 'stylish';
 const formatD = 'plain';
 const resultC = genDiff(firstFile2, secondFile2, formatC);
 const resultD = genDiff(firstFile2, secondFile2, formatD);
-test('genDiffCD', () => {
+test('should return correct diff between two yaml files', () => {
   expect(resultC).toEqual(getResultC);
   expect(resultD).toEqual(getResultD);
 });
+
 const firstFile3 = getFixturePath('file1.yaml');
 const secondFile3 = getFixturePath('file2.json');
 const getResult = readFile('resultForJson.txt');
 const format = 'json';
 const result = genDiff(firstFile3, secondFile3, format);
-test('genDiff', () => {
+test('should return correct diff between JSON and yaml files', () => {
   expect(result).toEqual(getResult);
 });

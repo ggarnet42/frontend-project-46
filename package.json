@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Compares two configuration files and shows a difference",
-  "main": "scr/index.js",
+  "bin": {
+    "gendiff": "bin/gendiff.js"
+  },
+  "main": "scr/genDiff",
   "scripts": {
     "test": "jest"
   },

@@ -1,4 +1,7 @@
 import yaml from 'js-yaml';
+import path from 'path';
+
+const extractFormat = (filename) => path.extname(filename).slice(1);
 
 const parsers = (format, file) => {
   switch (format) {
@@ -12,4 +15,4 @@ const parsers = (format, file) => {
   }
 };
 
-export default parsers;
+export { parsers, extractFormat };
